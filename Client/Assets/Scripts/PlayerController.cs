@@ -4,6 +4,7 @@ using UnityEngine.SceneManagement;
 
 public class PlayerController : PhysicsObject {
 
+	public bool LocalPlayer = false;
 	public Text scoreText;
 	private int score;
 	
@@ -25,9 +26,14 @@ public class PlayerController : PhysicsObject {
 
 	protected override void ComputeVelocity()
 	{
+		if(!LocalPlayer)
+		{
+			return;
+		}
 		Vector2 move = Vector2.zero;
 
 		move.x = Input.GetAxis("Horizontal");
+		Network.Move(move);
 
 		if(Input.GetButtonDown("Jump") && grounded)
 		{

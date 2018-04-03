@@ -8,46 +8,48 @@ var players = [];
 
 io.on("connection", function(socket) {
     
-    var currentPlayerId = shortId.generate();
+    var thisPlayerId = shortId.generate();
     var player = 
     {
-        id:currentPlayerId,
+        id:thisPlayerId,
         position:{x:0, y:0}
     };
-    players[currentPlayerId] = player
+    players[thisPlayerId] = player
 
-    socket.on("user connect", function(){
-        console.log("user connected");
-        for(var i = 0; i < clients.length; i++){
-            socket.emit("user connected", {name:clients[i].name, position:clients[i].position});
-            console.log("User name" + clients[i].name + " is connected");
-        }
+    console.log("client connected, id = ", thisPlayerId);
+   
+    // Adding player to network
+    socket.emit('register', {id:thisPlayerId});
+
+    // Spawn or Inistiate player to network
+    socket.broadcast.emit('spawn', {id:thisPlayerId});
+    
+    // when connect check if this player has already been inisiate or not
+    // If not been inisiate then raise even spawn to unity;
+    for(var playerId in players){
+        if(playerId == thisPlayerId)
+            continue;
+        socket.emit('spawn', players[playerId]);
+    };
+    
+    // player move
+    socket.on('move', function (data) {
+        data.id = thisPlayerId;
+        console.log('client moved', JSON.stringify(data));
+        
+        data.x = data.d.x;
+        data.y = data.d.y;
+        
+        delete data.d;
+        
+        socket.broadcast.emit('move', data);
+    });
+    
+    // when disconect
+    socket.on('disconnect', function () {
+        console.log('client disconected');
+        delete players[thisPlayerId];
+        socket.broadcast.emit('disconnected', {id:thisPlayerId});
     });
 
-    socket.on("play", function(data) {
-        currentUser = {
-            name:data.name,
-            position:data.position
-        }
-        clients.push(currentUser);
-        socket.emit("play", currentUser);
-        socket.broadcast.emit("user connected", currentUser);
-    });
-
-    socket.on("move", function(data) {
-        currentUser.position = data.position;
-        socket.emit("Move", currentUser);
-        socket.broadcast.emit("Move", currentUser);
-        console.log(currentUser.name + " move to " + currentUser.position);
-    });
-
-    socket.on("disconnect", function(data) {
-        socket.broadcast.emit("User Disconnected", currentUser);
-        for(var i = 0; i < clients.length; i++) {
-            if(clients[i].name == currentUser.name) {
-                console.log("User " + clients[i].name + " is logged out");
-                clients.splice(i, 1);
-            }
-        };
-    });
 });

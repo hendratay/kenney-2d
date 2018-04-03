@@ -109,6 +109,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gravityModifier: 1
   minGroundNormalY: 0.65
+  LocalPlayer: 0
+  scoreText: {fileID: 0}
   maxSpeed: 6
   jumpTakeOffSpeed: 8
 --- !u!212 &212906945425796856
