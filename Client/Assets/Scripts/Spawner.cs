@@ -5,6 +5,7 @@ using SocketIO;
 
 public class Spawner : MonoBehaviour {
 
+    public GameObject currentPlayer;
 	public GameObject networkPlayer;
     public SocketIOComponent socket;
     private Dictionary<string, GameObject> players = new Dictionary<string, GameObject>();

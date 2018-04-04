@@ -7,6 +7,11 @@ public class MainMenu : MonoBehaviour {
 	{
 		SceneManager.LoadScene("Town");
 	}
+
+	public void StartMultiplayer()
+	{
+		SceneManager.LoadScene("BattleGround");
+	}
 	
 	public void QuitGame()
 	{

@@ -11,6 +11,7 @@ TagManager:
   - KeyRed
   - KeyYellow
   - Exit
+  - Exit Town
   layers:
   - Default
   - TransparentFX

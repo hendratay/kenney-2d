@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 public class PlayerController : PhysicsObject {
 
 	public bool LocalPlayer = false;
+	public bool lookingRight;
 	public Text scoreText;
 	private int score;
 	
@@ -13,6 +14,10 @@ public class PlayerController : PhysicsObject {
 
 	private SpriteRenderer spriteRenderer;
 	private Animator animator;
+
+	public GameObject bulletPrefab;
+	public Transform bulletSpawn;
+
 
 	void Awake()
 	{
@@ -28,12 +33,29 @@ public class PlayerController : PhysicsObject {
 	{
 		if(!LocalPlayer)
 		{
+			animator.SetBool("grounded", grounded);
+			animator.SetFloat("velocityX", velocity.x / maxSpeed);
 			return;
 		}
-		Vector2 move = Vector2.zero;
 
+		Vector3 move = Vector2.zero;
 		move.x = Input.GetAxis("Horizontal");
-		Network.Move(move);
+
+		// TODO : make when move when keydown
+		if(SceneManager.GetActiveScene () == SceneManager.GetSceneByName("BattleGround"))
+		{
+			var destination = move + transform.position;
+			Network.Move(transform.position, destination);
+		}
+
+		if(Input.GetKeyDown(KeyCode.F))
+		{
+			Fire();	
+			if(SceneManager.GetActiveScene () == SceneManager.GetSceneByName("BattleGround"))
+			{
+				Network.Shoot(transform.position);
+			}
+		}
 
 		if(Input.GetButtonDown("Jump") && grounded)
 		{
@@ -69,10 +91,22 @@ public class PlayerController : PhysicsObject {
 		{
 			SceneManager.LoadScene("Town");
 		}
+		if(other.tag == "Exit Town")
+		{
+			SceneManager.LoadScene("Level 01");
+		}
 	}
-	
+
 	void CountScore()
 	{
 		scoreText.text = "x " + score.ToString();
+	}
+
+	public void Fire()
+	{
+		GameObject bullet = Instantiate(bulletPrefab, bulletSpawn.position, bulletSpawn.rotation) as GameObject;
+		Rigidbody2D rigidbody = bullet.GetComponent<Rigidbody2D>();
+		rigidbody.velocity = new Vector3(6f, 0f, 0f);
+		Destroy(bullet, 100f);
 	}
 }
