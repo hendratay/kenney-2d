@@ -174,8 +174,9 @@ MonoBehaviour:
   scoreText: {fileID: 0}
   maxSpeed: 6
   jumpTakeOffSpeed: 8
-  bulletPrefab: {fileID: 0}
-  bulletSpawn: {fileID: 0}
+  bulletPrefab: {fileID: 1318003401200112, guid: 1e6fcca0c1c92734db88393e15ad1ad1,
+    type: 2}
+  bulletSpawn: {fileID: 4271144558362130}
 --- !u!114 &114427787318765564
 MonoBehaviour:
   m_ObjectHideFlags: 1

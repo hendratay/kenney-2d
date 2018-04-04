@@ -53,6 +53,7 @@ public class Network : MonoBehaviour {
     private void OnShoot(SocketIOEvent obj)
     {
 		var player = spawner.GetPlayer(obj.data["id"].str);
+        Debug.Log(obj.data + " is shooting");
 		PlayerController pc = player.GetComponent<PlayerController>();
         pc.Fire();
     }

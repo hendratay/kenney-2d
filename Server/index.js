@@ -71,7 +71,6 @@ io.on("connection", function(socket) {
     socket.on('shoot', function(data){
         data.id = thisPlayerId;
         console.log('client shoot', JSON.stringify(data));
-		socket.emit('shoot', data);
 		socket.broadcast.emit('shoot', data);
     });
 

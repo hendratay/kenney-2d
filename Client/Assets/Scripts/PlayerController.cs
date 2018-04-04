@@ -33,8 +33,8 @@ public class PlayerController : PhysicsObject {
 	{
 		if(!LocalPlayer)
 		{
-			animator.SetBool("grounded", grounded);
-			animator.SetFloat("velocityX", velocity.x / maxSpeed);
+			animator.SetBool("grounded", true);
+			animator.SetFloat("velocityX", Mathf.Abs(velocity.x) / maxSpeed);
 			return;
 		}
 
@@ -107,6 +107,6 @@ public class PlayerController : PhysicsObject {
 		GameObject bullet = Instantiate(bulletPrefab, bulletSpawn.position, bulletSpawn.rotation) as GameObject;
 		Rigidbody2D rigidbody = bullet.GetComponent<Rigidbody2D>();
 		rigidbody.velocity = new Vector3(6f, 0f, 0f);
-		Destroy(bullet, 100f);
+		Destroy(bullet, 2f);
 	}
 }
