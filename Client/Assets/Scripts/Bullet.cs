@@ -4,14 +4,29 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour {
 
-	void OnCollisionEnter2D(Collision2D collision)
+	void OnTriggerEnter2D(Collider2D collision)
     {
-        GameObject hit = collision.gameObject;
-        var health = hit.GetComponent<PlayerHealth>();
-        if (health != null)
+        if(collision.tag == "Player")
         {
-            health.TakeDamage(10);
+            var health = collision.GetComponent<PlayerHealth>();
+            if (health != null)
+            {
+                health.TakeDamage(10);
+            }
+            Destroy(gameObject);
         }
-        Destroy(gameObject);
+    }
+
+    void onCollisionEnter2D(Collision2D collision)
+    {
+        if(collision.gameObject.tag == "Enemy")
+        {
+            var health = collision.gameObject.GetComponent<EnemyHealth>();
+            if (health != null)
+            {
+                health.TakeDamage(10);
+            }
+            Destroy(gameObject);
+        }
     }
 }

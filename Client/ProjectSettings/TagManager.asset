@@ -5,13 +5,10 @@ TagManager:
   serializedVersion: 2
   tags:
   - CoinBronze
-  - LockBlue
-  - KeyBlue
-  - KeyGreen
-  - KeyRed
-  - KeyYellow
   - Exit
   - Exit Town
+  - Water
+  - Enemy
   layers:
   - Default
   - TransparentFX

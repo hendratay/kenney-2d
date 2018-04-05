@@ -26,13 +26,13 @@ io.on("connection", function(socket) {
         };
         players[thisPlayerId] = player
         console.log("client connected, id = ", thisPlayerId);
-        console.log(player.name + player.health);
         socket.emit('register', {id:thisPlayerId});
 
         // Spawn or Inistiate player to network
-        socket.broadcast.emit('spawn', {id:thisPlayerId});
+        socket.broadcast.emit('spawn', {id:thisPlayerId, name:data.name});
+
         // when connect check if this player has already been inisiate or not
-        // If not been inisiate then raise even spawn to unity;
+        // If not been inisiate then raise event spawn to unity;
         for(var playerId in players){
             if(playerId == thisPlayerId)
                 continue;

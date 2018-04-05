@@ -9,7 +9,7 @@ public class Network : MonoBehaviour {
 	static SocketIOComponent socket;
 	public GameObject currentPlayer;
 	public Spawner spawner;
-    public InputField playerName;
+    public InputField playerNameInput;
 
     void Start()
     {
@@ -23,15 +23,15 @@ public class Network : MonoBehaviour {
 
     public void JoinGame()
     {
-        string name = playerName.text.ToString();
+        string name = playerNameInput.text.ToString();
         float health = currentPlayer.GetComponent<PlayerHealth>().currentHealth;
+        currentPlayer.GetComponent<PlayerController>().playerName.text = name;
         socket.Emit("join", DataToJson(name, health));
     }
 
     public void OnRegister(SocketIOEvent obj)
     {
         Debug.Log("registered id = " + obj.data);
-        spawner.AddPlayer(obj.data["id"].str, currentPlayer);
     }
     
     private void OnSpawn(SocketIOEvent obj)
@@ -39,6 +39,7 @@ public class Network : MonoBehaviour {
         Debug.Log("Spawn " + obj.data);
         var player = spawner.SpawnPlayer(obj.data["id"].str);
         PlayerController pc = player.GetComponent<PlayerController>();
+        pc.playerName.text = obj.data["name"].str;
         var move = GetVectorFromJson(obj);
         player.transform.position = move;
     }
@@ -100,5 +101,10 @@ public class Network : MonoBehaviour {
 		JSONObject jsonObject = new JSONObject(JSONObject.Type.OBJECT);
 		jsonObject.AddField("shoot", Network.VectorToJson(current));
         socket.Emit("shoot", jsonObject);
+    }
+
+    public static void Disconnect()
+    {
+        socket.Emit("disconnect");
     }
 }

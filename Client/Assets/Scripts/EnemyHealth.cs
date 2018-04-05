@@ -1,25 +1,20 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
-using UnityEngine.SceneManagement;
 
-public class PlayerHealth : MonoBehaviour {
+public class EnemyHealth : MonoBehaviour {
 
-	public Image healthBar;
-	public const float MAX_HEALTH = 100;
+	public const float MAX_HEALTH = 50;
 	public float currentHealth = MAX_HEALTH;
 
 	public void TakeDamage(float amount)
 	{
 		currentHealth -= amount;
-		healthBar.fillAmount = currentHealth / MAX_HEALTH;
 		if (currentHealth <= 0)
 		{
 			currentHealth = 0;
-			Debug.Log("Player is Dead !");
+			Debug.Log("Enemy is Dead !");
 			gameObject.SetActive(false);
 		}
 	}
-	
 }

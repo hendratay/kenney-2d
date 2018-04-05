@@ -5,9 +5,9 @@ using UnityEngine.SceneManagement;
 public class PlayerController : PhysicsObject {
 
 	public bool LocalPlayer = false;
-	public bool lookingRight;
-	public Text scoreText;
-	private int score;
+	public Text coinText;
+	private int coin;
+	public Text playerName;
 	
 	public float maxSpeed = 7f;
 	public float jumpTakeOffSpeed = 7f;
@@ -18,15 +18,16 @@ public class PlayerController : PhysicsObject {
 	public GameObject bulletPrefab;
 	public Transform bulletSpawn;
 
-
 	void Awake()
 	{
 		spriteRenderer = GetComponent<SpriteRenderer>();	
 		animator = GetComponent<Animator>();
 
-		//node.SubmitScore(1, 100);
-		// score = 0;
-		// CountScore();
+		if(SceneManager.GetActiveScene () == SceneManager.GetSceneByName("Level 01"))
+		{
+			coin = 0;
+			CountCoin();
+		}
 	}
 
 	protected override void ComputeVelocity()
@@ -84,8 +85,8 @@ public class PlayerController : PhysicsObject {
 		if(other.tag == "CoinBronze")
 		{
 			other.gameObject.SetActive(false);
-			score += 1;
-			CountScore();
+			coin += 1;
+			CountCoin();
 		}
 		if(other.tag == "Exit")
 		{
@@ -95,11 +96,11 @@ public class PlayerController : PhysicsObject {
 		{
 			SceneManager.LoadScene("Level 01");
 		}
-	}
-
-	void CountScore()
-	{
-		scoreText.text = "x " + score.ToString();
+		if(other.tag == "Water")
+		{
+			PlayerHealth ph = GetComponent<PlayerHealth>();
+			ph.TakeDamage(100);
+		}
 	}
 
 	public void Fire()
@@ -108,5 +109,10 @@ public class PlayerController : PhysicsObject {
 		Rigidbody2D rigidbody = bullet.GetComponent<Rigidbody2D>();
 		rigidbody.velocity = new Vector3(6f, 0f, 0f);
 		Destroy(bullet, 2f);
+	}
+
+	void CountCoin()
+	{
+		coinText.text = coin.ToString();
 	}
 }
